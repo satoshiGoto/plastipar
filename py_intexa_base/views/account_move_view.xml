@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- agregar el timbrado en la factura -->
+    <record id="view_move_form_account_tip_doc_py" model="ir.ui.view">
+        <field name="name">INVOICE DOCUMENT timbrado</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <field name="invoice_date" position="after">
+                <field name="move_name" attrs="{'invisible': [('state', '!=', 'draft')]}"  groups="py_ctrm_base.group_allow_invoice_force_number"/>
+            </field>
+            <!-- Timbrado y fecha de vencimiento que aparece en la factura del proveedor -->
+            <xpath expr="//field[@name='purchase_vendor_bill_id']" position="after">
+                <field name="tipdocgas"
+                       attrs="{'invisible': [('move_type', 'not in', ('in_invoice','in_refund'))], 'readonly': [('state', '!=', 'draft')]}"/>
+                <field name="tipdocing"
+                       attrs="{'invisible': [('move_type', 'in', ('in_invoice','in_refund'))], 'readonly': [('state', '!=', 'draft')]}"/>
+                <field name="timbrado_id" domain="[('state', '=', 'active')]" readonly="1"
+                       options="{'no_create':True, 'no_open': True}"
+                       attrs="{'invisible': [('move_type', 'in', ('in_invoice','in_refund'))], 'readonly': [('state', '!=', 'draft')]}"/>
+                <field name="py_timbrado_prov"
+                       attrs="{'invisible': [('move_type', 'not in', ('in_invoice','in_refund'))], 'readonly': [('state', '!=', 'draft')]}"/>
+                <field name="py_timbrado_prov_end"
+                       attrs="{'invisible': [('move_type', 'not in', ('in_invoice','in_refund'))], 'readonly': [('state', '!=', 'draft')]}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_reference']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_bank_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='product_id']" position="attributes">
+                <attribute name="options">{'no_create_edit': True, 'no_create': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='account_id']" position="attributes">
+                <attribute name="options">{'no_create_edit': True, 'no_create': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

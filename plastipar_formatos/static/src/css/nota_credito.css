@@ -1,0 +1,25 @@
+.contenedor{
+    font-family:Arial, sanserif;
+}
+
+table.tabla{
+     page-break-after:auto
+}
+td{
+     page-break-inside:avoid; page-break-after:auto;
+}
+tr{
+     page-break-inside:avoid; page-break-after:auto;
+}
+th{
+
+}
+tfoot{
+    display:table-footer-group
+}
+thead{
+    display:table-header-group;
+}
+.tabla table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <!-- explicit list view definition -->
+
+        <record model="ir.ui.view" id="campos_set">
+            <field name="name">campos.set</field>
+            <field name="model">account.journal</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='type']" position="after">
+                    <field name="req_doc"/>
+                    <field name="timbrado_id" options="{'no_create': True}" domain="[('state', '=', 'active')]"
+                           attrs="{'invisible':['|', ('req_doc', '=', False), ('type', '!=', 'sale')], 'required': [('req_doc', '=', True)]}"/>
+                </xpath>
+                <xpath expr="//field[@name='code']/.." position="inside">
+
+                    <field name="py_sequence_ids" nolabel="1" colspan="2" attrs="{'invisible': [('req_doc', '=', False)]}">
+                        <tree create="false" delete="false" editable="top" default_order="id">
+                            <field name="name" readonly="True" string="Secuencia"/>
+                            <field name="number_next_actual" string="Siguiente número"/>
+                            <field name="id" invisible="1"/>
+                        </tree>
+                    </field>
+
+                </xpath>
+                <field name="refund_sequence" position="attributes">
+                    <attribute name="attrs">{'invisible': [('req_doc', '=', True)]}</attribute>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>
