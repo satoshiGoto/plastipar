@@ -1,0 +1,59 @@
+<odoo>
+    <data>
+
+        <record id="sheet_format_factura" model="report.paperformat">
+            <field name="name">Factura</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_width">216</field>
+            <field name="page_height">330</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_spacing">10</field>
+            <field name="dpi">90</field>
+            <field name="header_line" eval="False"/>
+        </record>
+
+        <report
+                id="factura_report"
+                model="account.move"
+                string="Factura"
+                report_type="qweb-pdf"
+                name="plastipar_formatos.factura_template_py"
+                file="plastipar_formatos.factura_template_py"
+                attachment_use="True"
+                paperformat="sheet_format_factura"
+        />
+
+        <record id="sheet_format_nota_credito" model="report.paperformat">
+            <field name="name">Nota de Credito</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_width">216</field>
+            <field name="page_height">330</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_spacing">10</field>
+            <field name="dpi">90</field>
+            <field name="header_line" eval="False"/>
+        </record>
+
+        <report
+                id="nota_credito_report"
+                model="account.move"
+                string="Nota de Crédito"
+                report_type="qweb-pdf"
+                name="plastipar_formatos.nota_credito_template_py"
+                file="plastipar_formatos.nota_credito_template_py"
+                attachment_use="True"
+                paperformat="sheet_format_nota_credito"
+        />
+
+    </data>
+</odoo>

@@ -1,0 +1,420 @@
+<odoo>
+    <template id="nota_credito_template_py">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="o">
+                    <link rel="stylesheet" href="/plastipar_formatos/static/src/css/nota_credito.css"/>
+                    <div class="page">
+                        <table class="tabla">
+                            <thead>
+                                <tr>
+                                    <th style="border: 2px solid black; width: 605px">
+                                        <table class="tabla">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 200px">
+                                                        <img t-if="o.company_id.logo"
+                                                             t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)"
+                                                             style="width: unset; max-width: 200px; max-height: 200px"/>
+                                                    </th>
+                                                    <th style="text-align: left; width: 420px; font-size:12px; vertical-align: top; font-weight: normal">
+                                                        <span style="font-weight: bold; font-size: 13px; " t-esc="o.company_id.name"/>
+                                                        <br/>
+                                                        Teléfono: <span t-esc="o.company_id.phone"/>
+                                                        <br/>
+                                                        Dirección: <span t-esc="o.company_id.street"/>
+                                                        <br/>
+                                                        Correo: <span t-esc="o.company_id.email"/>
+                                                        <br/>
+                                                        <br/>
+                                                        <span t-esc="o.company_id.country_id.name"/>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </th>
+                                    <th style="width: 5px">
+                                        &amp;nbsp;
+                                    </th>
+                                    <th style="border: 2px solid black; text-align: center; width: 280px; vertical-align: middle; font-weight: normal; font-size:13px">
+                                        <div>
+                                            RUC:<span t-field="o.company_id.vat"/>
+                                        </div>
+                                        <div>
+                                            Timbrado: <span t-field="o.timbrado_id.name"/>
+                                        </div>
+                                        <div>
+                                            Valido hasta: <span t-field="o.timbrado_id.date_range_end"/>
+                                        </div>
+                                        <span style="font-size: 16px; font-weight: bold">
+                                            Nota de Crédito
+                                        </span>
+                                        <br/>
+                                        <span style="font-size: 18px; font-weight: bold" t-field="o.name"/>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <table>
+                            <thead>
+                                <tr style="font-size: 4px">
+                                    <th>
+                                        &amp;nbsp;
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <table class="tabla" style="border: 2px solid black; font-size: 13px; vertical-align: middle; font-weight; normal">
+                            <thead>
+                                <tr>
+                                    <th style="width: 170px">
+                                        <t t-if="o.invoice_date">
+                                            <span>Fecha</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span>Fecha</span>
+                                        </t>
+                                    </th>
+                                    <th style="width: 430px">
+                                        :
+                                        <t t-if="o.invoice_date">
+                                            <span t-esc="o.invoice_date.strftime('%d-%m-%Y')"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span t-esc="o.date.strftime('%d-%m-%Y')"/>
+                                        </t>
+                                    </th>
+                                    <th style="width: 130px">
+                                       Nº Factura
+                                    </th>
+                                    <th style="width: 150px">
+                                        : <span t-field="o.reversed_entry_id.name"/>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Nombre o Razón Social
+                                    </th>
+                                    <th>
+                                        : <span t-field="o.partner_id.name"/>
+                                    </th>
+                                    <th>
+                                        <span>Condición de Venta</span>
+                                    </th>
+                                    <th>
+                                        :
+                                        <t t-if="o.invoice_date == o.invoice_date_due">
+                                            <span style="font-weight: bold">CONTADO</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span style="font-weight: bold">CRÉDITO</span>
+                                        </t>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Nombre Fantasia
+                                    </th>
+                                    <th>
+                                        :
+                                    </th>
+                                    <th>
+                                        RUC/C.I
+                                    </th>
+                                    <th>
+                                        : <span t-field="o.partner_id.vat"/>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Dirección
+                                    </th>
+                                    <th>
+                                        : <span t-field="o.partner_id.street"/>
+                                    </th>
+                                    <th>
+                                        Teléfono
+                                    </th>
+                                    <th>
+                                        :
+                                        <t t-if="o.partner_id.phone">
+                                            <span t-field="o.partner_id.phone"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span t-field="o.partner_id.mobile"/>
+                                        </t>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Ciudad
+                                    </th>
+                                    <th>
+                                        : <span t-field="o.partner_id.city"/>
+                                    </th>
+                                    <th>
+                                        Plazo
+                                    </th>
+                                    <th>
+                                        <t t-if="o.invoice_date != o.invoice_date_due">
+                                        :    <span t-field="o.invoice_payment_term_id.name"/>
+                                        </t>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Observación
+                                    </th>
+                                    <th colspan="3">
+                                        : <span t-field="o.narration"/>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <table>
+                            <thead>
+                                <tr style="font-size: 4px">
+                                    <th>
+                                        &amp;nbsp;
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <table class="tabla">
+                            <thead>
+                                <tr style="font-size: 14px">
+                                    <th style="text-align: center; border: 2px solid black; width: 70px; vertical-align: middle">
+                                        CANT.
+                                    </th>
+                                    <th style="text-align: center; border: 2px solid black; width: 60px; vertical-align: middle">
+                                        UN
+                                    </th>
+                                    <th style="text-align: center; border: 2px solid black; width: 90px; vertical-align: middle">
+                                        CODIGO
+                                    </th>
+                                    <th style="text-align: center; border: 2px solid black; width: 300px; vertical-align: middle">
+                                        DESCRIPCIÓN
+                                    </th>
+                                    <th style="text-align: center; border: 2px solid black; width: 90px; vertical-align: middle">
+                                        UNIT
+                                    </th>
+                                    <th style="text-align: center; border: 2px solid black; width: 100px; vertical-align: middle">
+                                        EXENTAS
+                                    </th>
+                                    <th style="text-align: center; border: 2px solid black; width: 90px; vertical-align: middle">
+                                        5%
+                                    </th>
+                                    <th style="text-align: center; border: 2px solid black; width: 90px; vertical-align: middle">
+                                        10%
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="subtotalexenta1" t-value="0"/>
+                                <t t-set="subtotalcinco1" t-value="0"/>
+                                <t t-set="subtotaldiez1" t-value="0"/>
+                                <t t-set="total_filas" t-value="35"/>
+                                <t t-set="filas" t-value="0"/>
+                                <t t-foreach="o.invoice_line_ids" t-as="h">
+                                    <t t-set="filas" t-value="filas + 1"/>
+                                    <tr style="font-size: 12px">
+                                        <td style="border-left: 2px solid black; text-align: center; vertical-align: middle">
+                                            <span t-esc="'{0:,.0f}'.format(h.quantity).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                        </td>
+                                        <td style="border-left: 2px solid black; text-align: center; vertical-align: middle">
+
+                                        </td>
+                                        <td style="border-left: 2px solid black; vertical-align: middle">
+                                            <span t-field="h.product_id.default_code"/>
+                                        </td>
+                                        <td style="border-left: 2px solid black; vertical-align: middle">
+                                            <span t-field="h.name"/>
+                                        </td>
+                                        <td style="text-align: right; border-left: 2px solid black; vertical-align: middle">
+                                            <t t-if="o.currency_id.name =='PYG'">
+                                                <span t-esc="'{0:,.0f}'.format(h.price_unit).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                            </t>
+                                            <t t-else="">
+                                                <span t-esc="'{0:,.2f}'.format(h.price_unit).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                            </t>
+                                        </td>
+                                        <td style="text-align: right; border-left: 2px solid black; vertical-align: middle">
+                                            <t t-if="h.tax_free ">
+                                                <t t-if="o.currency_id.name =='PYG'">
+                                                    <span t-esc="'{0:,.0f}'.format(h.price_total).replace(',', '.')"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <span t-esc="'{0:,.2f}'.format(h.price_total).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                                </t>
+                                                <t t-set="subtotalexenta1" t-value="subtotalexenta1 + h.price_total"/>
+                                            </t>
+                                            <t t-else="">
+                                                <span>0</span>
+                                            </t>
+                                        </td>
+                                        <td style="text-align: right; border-left: 2px solid black; vertical-align: middle">
+                                            <t t-if="h.tax_5 ">
+                                                <t t-if="o.currency_id.name =='PYG'">
+                                                    <span t-esc="'{0:,.0f}'.format(h.price_total).replace(',', '.')"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <span t-esc="'{0:,.2f}'.format(h.price_total).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                                </t>
+                                                <t t-set="subtotalcinco1" t-value="subtotalcinco1 + h.price_total"/>
+                                            </t>
+                                            <t t-else="">
+                                                <span>0</span>
+                                            </t>
+                                        </td>
+                                        <td style="text-align: right; border-left: 2px solid black; border-right: 2px solid black; vertical-align: middle">
+                                            <t t-if="h.tax_10">
+                                                <t t-if="o.currency_id.name =='PYG'">
+                                                    <span t-esc="'{0:,.0f}'.format(h.price_total).replace(',', '.')"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <span t-esc="'{0:,.2f}'.format(h.price_total).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                                </t>
+                                                <t t-set="subtotaldiez1" t-value="subtotaldiez1 + h.price_total"/>
+                                            </t>
+                                            <t t-else="">
+                                                <span>0</span>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-set="total_filas" t-value="total_filas - filas"/>
+                                <t t-foreach="total_filas" t-as="h">
+                                    <tr>
+                                        <td style="border-left: 2px solid black; vertical-align: middle">
+                                            &amp;nbsp;
+                                        </td>
+                                        <td style="border-left: 2px solid black; text-align: center; vertical-align: middle">
+                                            &amp;nbsp;
+                                        </td>
+                                        <td style="border-left: 2px solid black; text-align: center; vertical-align: middle">
+                                            &amp;nbsp;
+                                        </td>
+                                        <td style="border-left: 2px solid black; text-align: center; vertical-align: middle">
+                                            &amp;nbsp;
+                                        </td>
+                                        <td style="border-left: 2px solid black; text-align: center; vertical-align: middle">
+                                            &amp;nbsp;
+                                        </td>
+                                        <td style="border-left: 2px solid black; text-align: center; vertical-align: middle">
+                                            &amp;nbsp;
+                                        </td>
+                                        <td style="border-left: 2px solid black; text-align: center; vertical-align: middle">
+                                            &amp;nbsp;
+                                        </td>
+                                        <td style="border-left: 2px solid black; border-right: 2px solid black; text-align: center; vertical-align: middle">
+                                            &amp;nbsp;
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr style="font-size: 13px; height: 30px; vertical-align: middle">
+                                    <td colspan="5" style="border: 2px solid black; vertical-align: middle">
+                                        <span style="padding-left: 15px">SUB- TOTALES</span>
+                                    </td>
+                                    <td style="border: 2px solid black; text-align: right; vertical-align: middle">
+                                        <t t-if="o.currency_id.name =='PYG'">
+                                            <span t-esc="'{0:,.0f}'.format(subtotalexenta1).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span t-esc="'{0:,.2f}'.format(subtotalexenta1).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                        </t>
+                                    </td>
+                                    <td style="border: 2px solid black; text-align: right; vertical-align: middle">
+                                        <t t-if="o.currency_id.name =='PYG'">
+                                            <span t-esc="'{0:,.0f}'.format(subtotalcinco1).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span t-esc="'{0:,.2f}'.format(subtotalcinco1).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                        </t>
+                                    </td>
+                                    <td style="border: 2px solid black; text-align: right; vertical-align: middle">
+                                        <t t-if="o.currency_id.name =='PYG'">
+                                            <span t-esc="'{0:,.0f}'.format(subtotaldiez1).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span t-esc="'{0:,.2f}'.format(subtotaldiez1).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                                <t t-set="totalennumero" t-value="0"/>
+                                <t t-set="totalennumero" t-value="totalennumero + subtotalexenta1"/>
+                                <t t-set="totalennumero" t-value="totalennumero + subtotalcinco1"/>
+                                <t t-set="totalennumero" t-value="totalennumero + subtotaldiez1"/>
+                                <tr style="font-size: 13px; height: 30px; vertical-align: middle">
+                                    <td colspan="7"
+                                        style="border-top: 2px solid black; border-left: 2px solid black; border-bottom: 2px solid black; vertical-align: middle">
+                                        <span style="padding-left: 15px">TOTAL A PAGAR</span>
+                                    </td>
+                                    <td style="border-right: 2px solid black; text-align: right; vertical-align: middle">
+                                        <t t-if="o.currency_id.name =='PYG'">
+                                            <span t-esc="'{0:,.0f}'.format(totalennumero).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span t-esc="'{0:,.2f}'.format(totalennumero).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr style="font-size: 13px; height: 30px; vertical-align: middle">
+                                    <td colspan="8" style="border: 2px solid black; vertical-align: middle">
+                                        <span style="padding-left: 15px">TOTAL A PAGAR (En letras): </span>
+                                        <span style="padding-left: 15px"
+                                              t-esc="o.currency_id.currency_unit_label+' '+o.generar_texto(o.amount_total, o.currency_id.id) "/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <t t-set="iva5t" t-value="0"/>
+                        <t t-set="iva10t" t-value="0"/>
+                        <t t-set="ivasuma" t-value="0"/>
+                        <t t-set="iva5t" t-value="subtotalcinco1 / 21"/>
+                        <t t-set="iva10t" t-value="subtotaldiez1 / 11"/>
+                        <t t-set="ivasuma" t-value="iva5t + iva10t"/>
+                        <table class="tabla">
+                            <tbody>
+                                <tr style="font-size: 13px; vertical-align: middle; height: 30px">
+                                    <td style="border-bottom: 2px solid black; border-left: 2px solid black; border-top: 1px solid black; width: 160px; vertical-align: middle">
+                                        <span style="padding-left: 10px">Liquidación del I.V.A.:</span>
+                                    </td>
+                                    <td style="border-bottom: 2px solid black; border-top: 1px solid black; width: 210px; vertical-align: middle">
+                                        (5%)
+                                        <t t-if="o.currency_id.name =='PYG'">
+                                            <span style="padding-left: 30px" t-esc="'{0:,.0f}'.format(iva5t).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span style="padding-left: 30px" t-esc="'{0:,.2f}'.format(iva5t).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                        </t>
+                                    </td>
+                                    <td style="border-bottom: 2px solid black; border-top: 1px solid black; width: 210px; vertical-align: middle">
+                                        (10%)
+                                        <t t-if="o.currency_id.name =='PYG'">
+                                            <span style="padding-left: 30px" t-esc="'{0:,.0f}'.format(iva10t).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span style="padding-left: 30px" t-esc="'{0:,.2f}'.format(iva10t).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                        </t>
+                                    </td>
+                                    <td style="border-bottom: 2px solid black; border-right: 2px solid black; border-top: 1px solid black; width: 300px; vertical-align: middle">
+                                        TOTAL IVA:
+                                        <t t-if="o.currency_id.name =='PYG'">
+                                            <span style="padding-left: 30px" t-esc="'{0:,.0f}'.format(round(ivasuma)).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span style="padding-left: 30px" t-esc="'{0:,.2f}'.format(round(ivasuma)).replace(',','a').replace('.','b').replace('a','.').replace('b',',')"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <th style="text-align: left; width: 420px; font-size:12px; vertical-align: top; font-weight: normal">
+                            <span style="font-weight: bold; font-size: 10px; ">Autorizado como autoimpresor por la SET N. Solicitud 350050013685 Fecha 01/07/2022</span>
+                        </th>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
